@@ -3,8 +3,7 @@ def union(a, b):
     b = list(b)
     c = b.copy()
     for i in range(len(a)):
-        for j in c:
-            if a[i] not in c:
-                c.append(a[i])
+        if a[i] not in c:
+            c.append(a[i])
     return c
 
