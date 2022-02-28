@@ -139,7 +139,7 @@ root.title("New Application by Oleh Bielov")
 root.iconbitmap(r"C:\Users\Oleh\codes\index.ico")
 root.geometry("400x400")
 
-
+#12312
 # Variant
 def My_variat():
     G = 11
