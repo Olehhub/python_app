@@ -87,6 +87,3 @@ def symetricdiff(a, b):
                     c[idx] = c[idx + 1]
                     c[idx + 1] = temp
     return c
-
-
-print(symetricdiff([3,1,2, 2,5,6,7,7,3,12,12,1], [1,2]))
