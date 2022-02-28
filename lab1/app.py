@@ -5,117 +5,11 @@ from random import sample
 
 
 
-def mode():
-    global arrA, arrB, arrC, univU, u, powerA, powerB, powerC, i, j
-    try:
-        with open(r"C:\Users\Oleh\codes\RESULT.txt") as f:
-            f.read()
-    except FileNotFoundError or FileExistsError:
-        print("Нажаль, заданого програмою файлу не існує")
-
-    i = 1
-    j = 1
-    value = rand.get()
-    if value == "Hand":
-        try:
-            arrA = set(re.split(r"[,::\s]", arrA.get()))
-            arrB = set(re.split(r"[,::\s]", arrB.get()))
-            arrC = set(re.split(r"[,::\s]", arrC.get()))
-            maxV = max(int(max(arrA)), int(max(arrB)), int(max(arrC)))
-            minV = min(int(min(arrA)), int(min(arrB)), int(min(arrC)))
-            if maxV <= 255 and minV >= 0:
-                MODES.normode()
-                win2_button.configure(state = NORMAL)
-                win3_button.configure(state = NORMAL)
-                win4_button.configure(state = NORMAL)
-                win5_button.configure(state = NORMAL)
-            else:
-                messagebox.showerror('Помилка', 'Неправильно введені дані')
-
-
-
-        except:
-            messagebox.showerror("Помилка", 'Неправильно введені дані')
-
-    elif value == "Random":
-        try:
-            powerA = int(arrA.get())
-            powerB = int(arrB.get())
-            powerC = int(arrC.get())
-        except ValueError:
-            messagebox.showerror(
-                "Помилка", 'Неправильно введені дані'
-            )
-        maxV = max(powerA, powerB, powerC)
-        a = univU.get()
-        u = a.split(' ')
-        if len(u) == 2:
-            u1 = int(u[0])
-            u2 = int(u[1])
-            if u1 > u2 or ((u2 - u1) < maxV or u2 > 255):
-                messagebox.showerror("Помилка", 'Неправильно введені дані')
-            else:
-                MODES.randomMode()
-                win2_button.configure(state=NORMAL)
-                win3_button.configure(state=NORMAL)
-                win4_button.configure(state=NORMAL)
-                win5_button.configure(state=NORMAL)
-
-# need some time to do this code, pay close attention to this function
-# if i choose a "Random" radionbutton, then i want to some entry space pop up
-# and i could put there info for algorithm
-def select():
-    value = rand.get()
-    if value == "Random":
-        button.configure(text='Згенерувати множину')
-        button.configure(state = NORMAL)
-        e_vig1.configure(state = NORMAL)
-        e_vig2.configure(state = NORMAL)
-        e_vig3.configure(state = NORMAL)
-        e_vig4.configure(state = NORMAL)
-        label.configure(text = "Введіть потужніть множин \nІнтервал для U-множини")
-    elif value == "Hand":
-        button.configure(text='Задати множину')
-        button.configure(state = NORMAL)
-        e_vig1.configure(state = NORMAL)
-        e_vig2.configure(state = NORMAL)
-        e_vig3.configure(state = NORMAL)
-        e_vig4.configure(state = DISABLED)
-        label.configure(text = "Введіть елементи доя множин")
-
-
-
 class MODES:
+    def __init__(self, x):
+        pass
 
 
-    def normode(self):
-        global univU
-        univU = union(union(arrA, arrB), arrC)
-        win2_button.configure(state = NORMAL)
-        printer()
-
-
-    def randomMode(self):
-        global arrA, arrB, arrC, arrU
-
-        arrU = list()
-
-        for i in range(int(u[0]), int(u[1]), - int(u[0]) + 2):
-            arrU.append(i)
-        arrA = sample(arrU, powerA)
-        arrB = sample(arrU, powerB)
-        arrC = sample(arrU, powerC)
-        univU = union(union(arrA, arrB), arrC)
-        printer()
-
-
-
-
-def printer():
-    results.configure(text = "A: " + str(arrA) +
-                      "\n\nB: " + str(arrB) +
-                      "\n\nC: " + str(arrC) +
-                      "\n\nU: " + str(univU))
 
 # a class that out put any text on window "New Application by Oleh Bielov"
 class outputlabels():
@@ -130,6 +24,9 @@ class outputlabels():
         text = Label(root, text=inp)
         text.grid(row=5, column=0)
 
+
+def select():
+    pass
 
 # ----------------------------------------------------
 # ---------------------MainWindow---------------------
@@ -166,12 +63,6 @@ e_vig4.place(x = 140, y = 350)
 
 
 #Some Labels
-results = Label(root, text = '')
-results.place(x = 50, y = 50)
-
-label = Label(root, text = '')
-label.place(x = 140, y = 100)
-
 txt_label = Label(root, text = "Виберіть мод")
 txt_label.place(x = 165, y = 20)
 
@@ -200,8 +91,6 @@ info_button.place(x=300, y=125)
 
 # More buttons for collision
 Search_image = PhotoImage(file=r"C:\Users\Oleh\codes\images\Bbb.png")
-button = Button(root, text = "Дія", state = DISABLED, command = lambda: mode())
-
 
 win2_button = Button(root, text='Open window 2', cursor='hand2', state = DISABLED)
 win3_button = Button(root, text='Open window 3', cursor='hand2', state = DISABLED)
