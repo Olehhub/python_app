@@ -39,7 +39,7 @@ def select():
         rbB.configure(state = NORMAL) 
         rbC.configure(state = NORMAL)
         rbU.configure(state = NORMAL)
-
+#123123
 def action(x):
     try:
         count = 0
