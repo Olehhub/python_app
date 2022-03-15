@@ -11,6 +11,7 @@ Z = ''
 Z1 = ''
 D1 = ''
 D2 = ''
+U_list = []
 main_set = []
 setA = set
 setB = set
@@ -213,10 +214,11 @@ def calc4():
 
 #---------------------Window5-------------------------
 def win5_setup():
+    global sets, top3, labelD, labelZ
     top3 = Toplevel()
-    top3.title("Вікно 4")
+    top3.title("Вікно 5")
     top3.iconbitmap(r"C:\Users\Oleh\codes\index.ico")
-    top3.geometry("400x500")
+    top3.geometry("600x500")
 
     buttonRead = Button(top3, text = "Зчитати з файлу", font = ("Times new roman", 20), command = lambda: read())
     buttonRead.place(x = 300, y = 100)
@@ -229,7 +231,7 @@ def win5_setup():
     labelD = Label(top3, text = '', font = ("Times new roman", 12))
     labelD.place(x = 0, y = 175)
     buttonCompZ = Button(top3, text  = "Порівняти Z", font = ("Times new roman", 20), command = lambda: CompZ())
-    buttonCompZ.place(x = 0, y = 175)
+    buttonCompZ.place(x = 0, y = 300)
 
     labelZ = Label(top3, text = '', font = ("Times new roman", 12))
     labelZ.place(x=0, y = 225)
@@ -271,11 +273,11 @@ def count():
 
 def read():
     global D1, D2, Z1, sets
-    with open(r'C:\Users\Oleh\git\lab1\results.txt', 'a+') as f:
+    with open(r'C:\Users\Oleh\git\lab1\results.txt', 'r') as f:
         D1 = f.readline()[5::]
         D2 = f.readline()[5::]
         Z1 = f.readline()[5::]
-    sets.configure(text = 'D1 = ' + str(D1) + "\nD2 = " + str(D2) + "\nZ1 = " + str(Z1))
+        sets.configure(text = 'D1 = ' + str(D1) + "\nD2 = " + str(D2) + "\nZ1 = " + str(Z1))
 
 
 #---------------------Window5-------------------------
@@ -320,7 +322,7 @@ class outputlabels():
 def select():
     go = rand.get() 
     if go == "Random":
-        next_stage_label.configure(text = r'Введіть потужність для множини A')
+        next_stage_label.configure(text = r'Введіть потужність для множини A' + '\n' + "та інтервал для U множини")
         proccesing_button = Button(root, text = 'Дія', bg = 'yellow', command = lambda: action(main_set, setpower.get()))
         proccesing_button.place(x = 190, y = 165)
         start.configure(state=NORMAL)
@@ -329,10 +331,10 @@ def select():
         
 
 def random_mode(A, B, C):
-    global setA, setB, setC, setU
-    setA = set(sample(range(20), A))
-    setB = set(sample(range(20), B))
-    setC = set(sample(range(20), C))
+    global setA, setB, setC, setU, U_list
+    setA = set(sample(range(U_list[0], U_list[-1] + 1), A))
+    setB = set(sample(range(U_list[0], U_list[-1] + 1), B))
+    setC = set(sample(range(U_list[0], U_list[-1] + 1), C))
     setU = set(union(union(setA, setB), setC))
     win2_button.configure(state= NORMAL)
     win3_button.configure(state = NORMAL)
@@ -357,13 +359,19 @@ def normal_mode():
 
 
 def action2():
-    global setA, setB, setC, setU, powerA, powerB, powerC, mass
-    go = rand.get() 
+    global setA, setB, setC, setU, powerA, powerB, powerC, mass, U_list
+    go = rand.get()
+    
+    Uran = list(rbU.get().split(sep = ' '))
+    Uran2 = [int(x) for x in Uran]
+    for i in range(Uran2[0], Uran2[1] + 1):
+        U_list.append(int(i))
+
     if go == "Norm":
         try:
-            setA = set(rbA.get().split(sep= ' ', maxsplit=10))
-            setB = set(rbB.get().split(sep= ' ', maxsplit=10))
-            setC = set(rbC.get().split(sep= ' ', maxsplit=10))
+            setA = set(rbA.get().split(sep= ' ', maxsplit=len(U_list)))
+            setB = set(rbB.get().split(sep= ' ', maxsplit=len(U_list)))
+            setC = set(rbC.get().split(sep= ' ', maxsplit=len(U_list)))
             maxValue = max(int(max(setA)), int(max(setB)), int(max(setC)))
             minValue = min(int(min(setA)), int(min(setB)), int(min(setC)))
             if maxValue <= 255 and minValue >=0:
@@ -383,19 +391,16 @@ def action2():
                     powerC = int(main_set[i])    
         except:
             messagebox.showerror("Помилка", "Неправельно введені дані")
-        random_mode(powerA, powerB,powerC)
-
-def setrange():
-    pass
+        random_mode(powerA, powerB, powerC)
 
 def action(base_set, x):
     global g
     try:
         if g == 0:
-            next_stage_label.configure(text = 'Введіть потужність для множини B')
+            next_stage_label.configure(text = 'Введіть потужність для множини B' '\n' + "та інтервал для U множини")
             g += 1
         elif g == 1:
-            next_stage_label.configure(text = 'Введіть потужність для множини C')
+            next_stage_label.configure(text = 'Введіть потужність для множини C' '\n' + "та інтервал для U множини")
             g += 1
         int_value = int(x)
         setpower.delete(0, END)
@@ -461,21 +466,7 @@ Radiobutton(root, text = 'Random', command = lambda: select(),
                         variable = rand, value = "Random").place(x = 130, y = 50)
 Radiobutton(root, text = 'By Hand', command = lambda: select(),
                          variable = rand, value = "Norm").place(x = 210, y = 50)
-
-#range
-mod = StringVar()
-mod.set(0)
-form = mod.get()
-
-Radiobutton(root, text = '0 <= x <= 50 ', command = lambda: setrange(),
-                            variable = mod, value = '1').place(x = 300, y = 220)
-Radiobutton(root, text = '50 <= x <= 100', command = lambda: setrange(),
-                            variable = mod, value = '2').place(x = 300, y = 240)
-Radiobutton(root, text = '100 <= x <= 255', command = lambda: setrange(),
-                            variable = mod, value = '3').place(x = 300, y = 260)
                             
-
-
 # Info Button
 info_button = Button(root, text='press me for info', command=lambda: My_variat())
 info_button.place(x=300, y=125)
