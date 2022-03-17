@@ -52,41 +52,38 @@ def setup():
 def output_calc():   
     global D, k, buttonSave, top
 
-    step1 = diff(setU, setB)
+    step1 = crossing(setB, setC)
     step2 = union(setA, step1)
     step3 = diff(setU, setA)
-    step4 = crossing(step3, step2)
-    step5 = diff(setU, step4)
-    step6 = diff(step5, setC)
+    step4 = union(step3, setC)
+    step5 = crossing(step2, step4)
 
     #¬  ∩  ∪
     steps = [
-        '¬B = ',
-        'A ∪ ¬B = ',
+        'B ∩ C = ',
+        'A ∪ (B ∩ C) = ',
         '¬A = ',
-        '¬A ∩ (A ∪ ¬B) = ',
-        '¬(¬A ∩ (A ∪ ¬B)) = ',
-        '¬(¬A ∩ (A ∪ ¬B))/C = '
+        '¬A ∪ C = ',
+        '(A ∪ (B ∩ C)) ∩ (¬A ∪ C) = '
     ]
 
     nx_steps = [step1,
                 step2,
                 step3,
                 step4,
-                step5,
-                step6
+                step5
     ]
-    D = "D1 = " + str(sorted(list(step6)))
-    if k < 6:
+    D = "D1 = " + str(sorted(list(step5)))
+    if k < 5:
         if len(nx_steps[k]) == 0:
             nx_steps[k] = '`'
         win2_lab = Label(top, text = (str(steps[k])) + str(nx_steps[k]), 
                                         font = ("New Timer Roman", 10))
         win2_lab.place(x = 100, y = 160 + 25*k)
         k += 1
-    elif k == 6:
-        if len(nx_steps[5]) == 0:
-            nx_steps[5] = "`"
+    elif k == 5:
+        if len(nx_steps[4]) == 0:
+            nx_steps[4] = "`"
         win2_lab = Label(top, text =  D , font = ("New Timer Roman", 10))
         win2_lab.place(x = 100, y = 160 + 25*k)
         k = 0
@@ -132,26 +129,25 @@ def output_calculus():
     global D, k, top1
     #¬  ∩  ∪
     steps1 = ['A ∪ B =',
-              '¬C =',
-              '(A ∪ B) ∩ ¬C =']
-    
+              '(A ∪ B) ∩ C ='
+    ]
+
     step1 = union(setA, setB)
-    step2 = diff(setU, setC)
-    step3 = crossing(step1, step2)          
+    step2 = crossing(step1, setC)    
 
     nx_steps1 = [step1, 
-                 step2,
-                 step3]
-    D = "D2 = " + str(sorted(list(step3)))
-    if k < 3:
+                 step2
+    ]
+    D = "D2 = " + str(sorted(list(step2)))
+    if k < 2:
         if len(nx_steps1[k]) == 0:
             nx_steps1[k] = '`'
         win2_lab = Label(top1, text = (str(steps1[k])) + str(nx_steps1[k]), 
                                         font = ("New Timer Roman", 10))
         win2_lab.place(x = 100, y = 160 + 25*k)
         k += 1
-    elif k == 3:
-        if len(nx_steps1[2]) == 0:
+    elif k == 2:
+        if len(nx_steps1[1]) == 0:
             nx_steps1[2] = "`"
         win2_lab = Label(top1, text = D , font = ("New Timer Roman", 10))
         win2_lab.place(x = 100, y = 160 + 25*k)
@@ -170,8 +166,8 @@ def win4_setup():
     top2.iconbitmap(r"C:\Users\Oleh\codes\index.ico")
     top2.geometry("400x500")
 
-    setX = setC
-    setY = diff(setU, setB)
+    setX = diff(setU, setA)
+    setY = setB
 
     textlabel = 'X: ' + str(list(setX)) + '\n\nY: ' + str(list(setY))
     sets = Label(top2, text = textlabel, font = ("Times New Roman", 20))
@@ -196,14 +192,9 @@ def save2():
 def calc4():
     global Z, top2, buttonSave, setX, setY
 
-    setX = setC
-    setY = diff(setU, setB)
-
-    resultZ = diff(setX,setY)
-    print(setX)
-    print(setY)
+    resultZ = union(setX,setY)
     Z = "Z1 = " + str(sorted(list(resultZ)))
-    label = Label(top2, text = "Z = X \ Y", font = ("New Times Roman", 12))
+    label = Label(top2, text = "Z = X ∪ Y", font = ("New Times Roman", 12))
     label.place(x = 0, y = 185)
     label2 = Label(top2, text = "Z = " + str(resultZ), font = ("New Times Roman", 12))
     label2.place(x = 0, y = 205)
@@ -264,9 +255,7 @@ def CompD():
 
 def count():
     global top3, setX, setY, setA, setU, setZ, buttonCount, buttonCompD, buttonCompZ
-    setX = set(setC)
-    setY = diff(setU, setB)
-    setZ = diff(setX, setY)
+    setZ = union(setX, setY)
 
     z2label = Label(top3, text = 'Z2 = ' + str(setZ), font = ("Times new roman", 12))
     z2label.place(x = 0, y = 135)
@@ -288,6 +277,9 @@ def read():
 def My_variat():
     G = 11
     N = 1
+    M = "IO"
+    if M == "IO":
+        N += 2
     variant = (N + G % 60) % 30 + 1
     speech = "Бєлов Олег\nМоя група: IO - 11\nМій номер у групі: 1\n" \
              "Мій варіант:" + str(variant)
