@@ -205,10 +205,8 @@ class Window3(Setup):
         self.win3.geometry("450x500")
 
         win3_btn = Button(self.win3, text = 'bla', command = lambda: algorithmS()).pack()
-
-        print(type(list(female)))
-        print(list(female))
-
+        win3_btn = Button(self.win3, text = 'bla2', command = lambda: algorithmS()).pack()
+        
         def algorithmS():
             god_father = list()
             for i in female:
@@ -233,7 +231,12 @@ class Window3(Setup):
 
 
         def algorithmR():
-            pass
+            svoyak = list()
+            for i in female:
+                svoyak.append(i)
+             
+            copy_svoyak = svoyak.copy()
+
         
 
         self.win3.mainloop()
