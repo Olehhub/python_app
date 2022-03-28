@@ -2,6 +2,7 @@ from tkinter import *
 from random import *
 import copy
 
+
 root = Tk()
 root.title("lab2")
 root.iconbitmap(r"C:\Users\Oleh\codes\index.ico")
@@ -110,7 +111,6 @@ class Window2(Setup):
                 female = set(female.split())
                 female = female.union(female_save)
                 text_A.configure(text = 'A = '  + str(female))
-                print(female)
             elif val.get() == 'male':
                 #all males names saved in male instance above
                 try:
@@ -134,12 +134,9 @@ class Window2(Setup):
                 male = set(male.split())
                 male = male.union(male_save)
                 text_B.configure(text = 'B = '  + str(male))
-                print(male)
 
         def delete():
             global female, text_A, val, male, text_B
-            print(female)
-            print(male)
             if val.get() == 'female':
                 for i in win2_listbox1.curselection():
                     if win2_listbox1.get(i) in female:
@@ -199,16 +196,27 @@ class Window3(Setup):
             
 
     def space3(self):
+        global win3_listbox1, win3_listbox2
         self.win3 = Toplevel()
         self.win3.title("Window2")
         self.win3.iconbitmap(r"C:\Users\Oleh\codes\index.ico")
-        self.win3.geometry("450x500")
+        self.win3.geometry("620x628")
 
-        win3_btn = Button(self.win3, text = 'bla', command = lambda: algorithmS()).pack()
-        win3_btn = Button(self.win3, text = 'bla2', command = lambda: algorithmR()).pack()
+        win3_btn = Button(self.win3, text = 'розрахувати алгорит S', command = lambda: algorithmS()).place(x = 10, y = 10)
+        win3_btn = Button(self.win3, text = 'розрахувати алгорит R', command = lambda: algorithmR()).place(x = 10, y = 40)
+        win3_btn = Button(self.win3, text = 'відобразити на малюнку', command = lambda: canvas_aSb()).place(x = 10, y = 70)
         
+        win3_lbl_frame1 =LabelFrame(self.win3, text = 'aSb')
+        win3_lbl_frame2 = LabelFrame(self.win3, text = 'aRb')
+        win3_lbl_frame1.place(x = 200, y = 0)
+        win3_lbl_frame2.place(x = 400, y = 0)
+        win3_listbox1 = Listbox(win3_lbl_frame1, height = 10, selectmode=DISABLED)
+        win3_listbox1.pack()
+        win3_listbox2 = Listbox(win3_lbl_frame2, height = 10, selectmode=DISABLED)
+        win3_listbox2.pack()
+
         def algorithmS():
-            global relationsS
+            global relationsS, win3_listbox1
             god_father = list()
             for i in female:
                 if i in self.set_M:
@@ -229,10 +237,13 @@ class Window3(Setup):
                     B.remove(child)
                 if len(god_father) == 0:
                     break 
-                
+            print(relationsS)
+            for i in relationsS:
+                win3_listbox1.insert(END, str(i) + ',')
+            return relationsS
 
         def algorithmR():
-            global relationsS
+            global relationsS, relationsR, win3_listbox2
             svoyak = list()
             for i in female:
                 if i in self.set_M:
@@ -257,7 +268,45 @@ class Window3(Setup):
                         B.remove(boyfriend)
                 if len(svoyak) == 0:
                     break
+            print(relationsR)  
+            for i in relationsR:
+                win3_listbox2.insert(END, str(i) + ',')
+            return relationsR
 
+        def canvas_aSb():
+            global relationsR, relationsS
+            aSb = Canvas(self.win3, width=700, height=200)
+            dict_SA = {}
+            dict_SB = {}
+            for i in range(len(female)):
+                aSb.create_text(30 + i * 50, 50, text=list(female)[i], font=("New Times Roman", 10))
+                aSb.create_oval([20 + i * 50, 60], [40 + i * 50, 80], fill='yellow')
+                dict_SA.update({list(female)[i]: [30 + i * 50, 80]})
+            for x in range(len(male)):
+                aSb.create_text(30 + x * 50, 190, text=list(male)[x], font=("New Times Roman", 10))
+                aSb.create_oval([20 + x * 50, 160], [40 + x * 50, 140], fill='red')
+                dict_SB.update({list(male)[x]: [30 + x * 50, 160]})
+            for k in relationsS:
+                aSb.create_line(dict_SA[k[0]], dict_SB[k[1]], arrow = LAST)
+            aSb.place(x = 50, y = 150)
+            aRb = Canvas(self.win3, width=700, height=225)
+            dict_RA = {}
+            dict_RB = {}
+            for i in range(len(female)):
+                aRb.create_text(30 + i * 50, 50, text=list(female)[i], font=("New Times Roman", 10))
+                aRb.create_oval([20 + i * 50, 60], [40 + i * 50, 80], fill='yellow')
+                dict_RA.update({list(female)[i]: [30 + i * 50, 80]})
+            for x in range(len(male)):
+                aRb.create_text(30 + x * 50, 190, text=list(male)[x], font=("New Times Roman", 10))
+                aRb.create_oval([20 + x * 50, 160], [40 + x * 50, 140], fill='red')
+                dict_RB.update({list(male)[x]: [30 + x * 50, 160]})
+            for k in relationsR:
+                aRb.create_line(dict_RA[k[0]], dict_RB[k[1]], arrow = LAST)
+            aRb.place(x = 50, y = 400)
+            lbl_aSb = Label(self.win3, text = 'a хрещений батько b: ', font=('New Times Roman', 10))
+            lbl_aSb.place(x = 50, y = 147)
+            lbl_aRb = Label(self.win3, text = 'а свояк b:', font=('New Times Roman', 10))
+            lbl_aRb.place(x = 50, y = 397) 
         
 
         self.win3.mainloop()
@@ -279,8 +328,125 @@ class Window4(Setup):
         self.win4 = Toplevel()
         self.win4.title("Window2")
         self.win4.iconbitmap(r"C:\Users\Oleh\codes\index.ico")
-        self.win4.geometry("450x500")
-        btn4 = Button(self.win4, text = 'check4').pack()
+        self.win4.geometry("550x500")
+        win4_frame = Frame(self.win4, bd = 10)
+        win4_frame.place(x= 90, y = 0)
+        win4_lbl_oper = Label(win4_frame, text = 'Операції над відношеннями', font = ('Arial', 16))
+        win4_lbl_oper.grid(row = 0, columnspan=4)
+        #¬  ∩  ∪
+        union_btn = Button(self.win4, text = 'R ∪ S', width=5, command = lambda: btn1())
+        union_btn.grid(row = 1, column=0, sticky='w')
+        intersiction_btn = Button(self.win4, text = 'R ∩ S', width = 5, command = lambda: btn2())
+        intersiction_btn.grid(row = 2, column=0, sticky='w')
+        difference_btn = Button(self.win4, text ='R \ S', width=5, command=lambda: btn3())
+        difference_btn.grid(row = 3, column=0, sticky='w')
+        not_btn  =Button(self.win4, text = 'U \ R', width=5, command = lambda: btn4())
+        not_btn.grid(row =4, column=0, sticky='w')
+        reverse_btn = Button(self.win4, text = 'S-1', width=5, command = lambda: btn5())
+        reverse_btn.grid(row = 5, column=0, sticky='w')
+        canv = Canvas(self.win4, width=600, height=250)
+        canv.grid(row = 1, rowspan=6, column=3)
+
+
+        def btn1():
+            canv.delete('all')
+            canv.create_text(150, 20, text = 'R \u222A S', font = 'Arial 16')
+            dict_b1 = {}
+            dict_b2 = {}
+            V = list(relationsR) + list(relationsS)
+            for i in range(len(female)):
+                canv.create_text(30 + i * 50, 50, text=list(female)[i], font=("New Times Roman", 10))
+                canv.create_oval([20 + i * 50, 60], [40 + i * 50, 80], fill='yellow')
+                dict_b1.update({list(female)[i]: [30 + i * 50, 80]})
+            for x in range(len(male)):
+                canv.create_text(30 + x * 50, 190, text=list(male)[x], font=("New Times Roman", 10))
+                canv.create_oval([20 + x * 50, 160], [40 + x * 50, 140], fill='red')
+                dict_b2.update({list(male)[x]: [30 + x * 50, 160]})
+            for l in V:
+                canv.create_line(dict_b1[l[0]], dict_b2[l[1]], arrow = LAST)
+
+        def btn2():
+            canv.delete('all')
+            canv.create_text(150, 20, text = 'R \u2229 S', font = 'Arial 16')
+            dict_b1 = {}
+            dict_b2 = {}
+            V = []
+            for i in relationsR:
+                if i in relationsS:
+                    V.append(i)
+            for i in range(len(female)):
+                canv.create_text(30 + i * 50, 50, text=list(female)[i], font=("New Times Roman", 10))
+                canv.create_oval([20 + i * 50, 60], [40 + i * 50, 80], fill='yellow')
+                dict_b1.update({list(female)[i]: [30 + i * 50, 80]})
+            for x in range(len(male)):
+                canv.create_text(30 + x * 50, 190, text=list(male)[x], font=("New Times Roman", 10))
+                canv.create_oval([20 + x * 50, 160], [40 + x * 50, 140], fill='red')
+                dict_b2.update({list(male)[x]: [30 + x * 50, 160]})
+            for l in V:
+                if len(V) != 0:
+                    canv.create_line(dict_b1[l[0]], dict_b2[l[1]], arrow = LAST)
+            
+
+        def btn3():
+            canv.delete('all')
+            canv.create_text(150, 20, text = 'R \u2229 S', font = 'Arial 16')
+            dict_b1 = {}
+            dict_b2 = {}
+            V = copy.deepcopy(relationsR)
+            for i in V:
+                if i in relationsS:
+                    V.remove(i)
+            for i in range(len(female)):
+                canv.create_text(30 + i * 50, 50, text=list(female)[i], font=("New Times Roman", 10))
+                canv.create_oval([20 + i * 50, 60], [40 + i * 50, 80], fill='yellow')
+                dict_b1.update({list(female)[i]: [30 + i * 50, 80]})
+            for x in range(len(male)):
+                canv.create_text(30 + x * 50, 190, text=list(male)[x], font=("New Times Roman", 10))
+                canv.create_oval([20 + x * 50, 160], [40 + x * 50, 140], fill='red')
+                dict_b2.update({list(male)[x]: [30 + x * 50, 160]})
+            for l in V:
+                canv.create_line(dict_b1[l[0]], dict_b2[l[1]], arrow = LAST)
+            
+
+        def btn4():
+            canv.delete('all')
+            canv.create_text(150, 20, text = 'R \u2229 S', font = 'Arial 16')
+            dict_b1 = {}
+            dict_b2 = {}
+            V = relationsS
+            for i in range(len(female)):
+                canv.create_text(30 + i * 50, 50, text=list(female)[i], font=("New Times Roman", 10))
+                canv.create_oval([20 + i * 50, 60], [40 + i * 50, 80], fill='yellow')
+                dict_b1.update({list(female)[i]: [30 + i * 50, 80]})
+            for x in range(len(male)):
+                canv.create_text(30 + x * 50, 190, text=list(male)[x], font=("New Times Roman", 10))
+                canv.create_oval([20 + x * 50, 160], [40 + x * 50, 140], fill='red')
+                dict_b2.update({list(male)[x]: [30 + x * 50, 160]})
+            for l in V:
+                if len(V) != 0:
+                    canv.create_line(dict_b1[l[0]], dict_b2[l[1]], arrow = LAST)
+            
+        def btn5():
+            canv.delete('all')
+            canv.create_text(150, 20, text = 'R \u2229 S', font = 'Arial 16')
+            dict_b1 = {}
+            dict_b2 = {}
+            V = copy.deepcopy(relationsS)
+            print(V)
+            for i in V:
+                list(i)[0], list(i)[1] = list(i)[1], list(i)[0]
+            print(V)
+            for i in range(len(female)):
+                canv.create_text(30 + i * 50, 50, text=list(female)[i], font=("New Times Roman", 10))
+                canv.create_oval([20 + i * 50, 60], [40 + i * 50, 80], fill='yellow')
+                dict_b1.update({list(female)[i]: [30 + i * 50, 80]})
+            for x in range(len(male)):
+                canv.create_text(30 + x * 50, 190, text=list(male)[x], font=("New Times Roman", 10))
+                canv.create_oval([20 + x * 50, 160], [40 + x * 50, 140], fill='red')
+                dict_b2.update({list(male)[x]: [30 + x * 50, 160]})
+            for l in V:
+                canv.create_line(dict_b1[l[0]], dict_b2[l[1]], arrow = LAST)
+            
         self.win4.mainloop()
 #-------------------------WINDOW4-------------------------------
 
