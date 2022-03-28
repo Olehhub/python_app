@@ -23,7 +23,8 @@ setZ = set
 buttonSave = Button
 buttonCount = Button
 buttonCompD = Button
-buttonCompZ  = Button 
+buttonCompZ  = Button
+proccesing_button = Button 
 top = Toplevel
 
 #---------------------Window2-------------------------
@@ -312,11 +313,12 @@ class outputlabels():
 
 
 def select():
+    global fr
     go = rand.get() 
     if go == "Random":
         next_stage_label.configure(text = r'Введіть потужність для множини A' + '\n' + "та інтервал для U множини")
-        proccesing_button = Button(root, text = 'Дія', bg = 'yellow', command = lambda: action(main_set, setpower.get()))
-        proccesing_button.place(x = 190, y = 165)
+        proccesing_button = Button(fr, text = 'Дія', bg = 'yellow', command = lambda: action(main_set, setpower.get()))
+        proccesing_button.pack()
         start.configure(state=NORMAL)
     elif go == "Norm":
         start.configure(state=NORMAL)
@@ -332,10 +334,10 @@ def random_mode(A, B, C):
     win3_button.configure(state = NORMAL)
     win4_button.configure(state = NORMAL)
     win5_button.configure(state = NORMAL)
-    outputlabels.outlabel(0, setA, 'A:  ', 0, 230) #x = 140, y = 230
-    outputlabels.outlabel(0, setB, 'B:  ', 0, 290) #x = 140, y = 290
-    outputlabels.outlabel(0, setC, 'C:  ', 0, 350) #x = 140, y = 350
-    outputlabels.outlabel(0, setU, 'U:  ', 0, 410) #x = 140, y = 410
+    outputlabels.outlabel(0, setA, 'A:  ', 0, 250) #x = 140, y = 230
+    outputlabels.outlabel(0, setB, 'B:  ', 0, 310) #x = 140, y = 290
+    outputlabels.outlabel(0, setC, 'C:  ', 0, 370) #x = 140, y = 350
+    outputlabels.outlabel(0, setU, 'U:  ', 0, 430) #x = 140, y = 410
 
 def normal_mode():
     global setA, setB, setC, setU
@@ -344,10 +346,10 @@ def normal_mode():
     win3_button.configure(state = NORMAL)
     win4_button.configure(state = NORMAL)
     win5_button.configure(state = NORMAL)
-    outputlabels.outlabel(0, setA, 'A:  ', 0, 230) #x = 140, y = 230
-    outputlabels.outlabel(0, setB, 'B:  ', 0, 290) #x = 140, y = 290
-    outputlabels.outlabel(0, setC, 'C:  ', 0, 350) #x = 140, y = 350
-    outputlabels.outlabel(0, setU, 'U:  ', 0, 410) #x = 140, y = 410
+    outputlabels.outlabel(0, setA, 'A:  ', 0, 250) #x = 140, y = 230
+    outputlabels.outlabel(0, setB, 'B:  ', 0, 310) #x = 140, y = 290
+    outputlabels.outlabel(0, setC, 'C:  ', 0, 370) #x = 140, y = 350
+    outputlabels.outlabel(0, setU, 'U:  ', 0, 430) #x = 140, y = 410
 
 
 def action2():
@@ -416,13 +418,13 @@ exit_button.place(x=360, y=370)
 
 #Entry viget
 rbA = Entry(root, borderwidth = 5, state = NORMAL)
-rbA.place(x = 140, y = 230)
+rbA.place(x = 140, y = 250)
 rbB = Entry(root, borderwidth = 5, state = NORMAL)
-rbB.place(x = 140, y = 290)
+rbB.place(x = 140, y = 310)
 rbC = Entry(root, borderwidth = 5, state = NORMAL)
-rbC.place(x = 140, y = 350)
+rbC.place(x = 140, y = 370)
 rbU = Entry(root, borderwidth = 5, state = NORMAL)
-rbU.place(x = 140, y = 410)
+rbU.place(x = 140, y = 430)
 
 
 setpower = Entry(root, borderwidth = 5, state = NORMAL)
@@ -438,10 +440,10 @@ B_label = Label(root, text = 'B')
 C_label = Label(root, text = 'C')
 U_label = Label(root, text = 'U')
 
-A_label.place(x = 200, y = 208)
-B_label.place(x = 200, y = 268)
-C_label.place(x = 200, y = 328)
-U_label.place(x = 200, y = 388)
+A_label.place(x = 200, y = 228)
+B_label.place(x = 200, y = 288)
+C_label.place(x = 200, y = 348)
+U_label.place(x = 200, y = 408)
 
 setpower_label = Label(root, text = "POWER")
 setpower_label.place(x = 180, y = 118)
@@ -472,7 +474,11 @@ win4_button = Button(root, text='Open window 4', cursor='hand2', state = DISABLE
 win5_button = Button(root, text='Open window 5', cursor='hand2', state = DISABLED, command = lambda: win5_setup())
 
 start = Button(root, text = "Задати множину", padx = 5,state= DISABLED,  command = lambda: action2())
-start.place(x = 20, y = 180)
+start.place(x = 20, y = 220)
+
+#Frame
+fr = LabelFrame(root, text = "Натисніть після того, як ввели величину", padx = 5, pady = 5)
+fr.place(x = 90, y = 165)
 
 
 win2_button.place(x=300, y=10)
