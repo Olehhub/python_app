@@ -205,9 +205,10 @@ class Window3(Setup):
         self.win3.geometry("450x500")
 
         win3_btn = Button(self.win3, text = 'bla', command = lambda: algorithmS()).pack()
-        win3_btn = Button(self.win3, text = 'bla2', command = lambda: algorithmS()).pack()
+        win3_btn = Button(self.win3, text = 'bla2', command = lambda: algorithmR()).pack()
         
         def algorithmS():
+            global relationsS
             god_father = list()
             for i in female:
                 if i in self.set_M:
@@ -223,19 +224,39 @@ class Window3(Setup):
                 if father == child:
                     B.remove(child)
                     child = choice(list(B))
-                if len(god_father) == 0:
-                    break 
                 if (child, father) not in relationsS:
                     relationsS.add((father, child))
                     B.remove(child)
-
+                if len(god_father) == 0:
+                    break 
+                
 
         def algorithmR():
+            global relationsS
             svoyak = list()
             for i in female:
-                svoyak.append(i)
+                if i in self.set_M:
+                    svoyak.append(i)
              
             copy_svoyak = svoyak.copy()
+            relationsR = set()
+            B = male.copy()
+            while len(relationsR) < len(copy_svoyak):
+                bridegroom = choice(list(svoyak))
+                boyfriend = choice(list(B))
+                svoyak.remove(bridegroom)
+                if bridegroom == boyfriend:
+                    B.remove(boyfriend)
+                    boyfriend = choice(list(B))
+                if boyfriend in self.set_W:
+                    B.remove(boyfriend)
+                    boyfriend = choice(list(B))    
+                if bridegroom and boyfriend in self.set_M:
+                    if (bridegroom, boyfriend) not in relationsS:
+                        relationsR.add((bridegroom, boyfriend))
+                        B.remove(boyfriend)
+                if len(svoyak) == 0:
+                    break
 
         
 

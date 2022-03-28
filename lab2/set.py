@@ -31,5 +31,5 @@ male = {'Ілля', 'Данило', 'Даніїл', 'Віталій', 'Андр�
 #                    local_child.remove(child)
 
 
-relations = set()
+relations = set('rr')
 print(len(relations))
